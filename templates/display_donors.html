@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Donors</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.remove-donor-form').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var donorName = form.find('.donor-name').val();
+
+                $.ajax({
+                    url: "/remove_donors",
+                    type: 'POST',
+                    data: { donor_name: donorName },
+                    success: function (response) {
+                        if (response.success) {
+                            form.closest('tr').remove();
+                            location.href = "/display_donors";
+                        } else {
+                            location.href = "/display_donors";
+                            console.log(response.error);
+                        }
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.statusText);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Display Donors</h1>
+    <form action="{{ url_for('display_donors') }}" method="POST">
+        <label for="name">Search by Name:</label>
+        <input type="text" id="name" name="name">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>All Donors</h2>
+    {% if funds %}
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Contact Number</th>
+                <th>Amount (Words)</th>
+                <th>Amount (Number)</th>
+                <th>Action</th>
+            </tr>
+            {% for fund in funds %}
+                <tr>
+                    <td>{{ fund['Name'] }}</td>
+                    <td>{{ fund['Date'] }}</td>
+                    <td>{{ fund['ContactNumber'] }}</td>
+                    <td>{{ fund['AmountWords'] }}</td>
+                    <td>{{ fund['AmountNumber'] }}</td>
+                    <td>
+                        <form class="remove-donor-form" action="/remove_donors" method="POST" script=>
+                            <input type="hidden" class="donor-name" name="donor_name" value="{{ fund['Name'] }}">
+                            <button type="submit" class="remove-donor-btn"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No donors found.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fund Entry</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Fund Entry</h1>
+    <form action="{{ url_for('add_fund') }}" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="contact_number">Contact Number:</label>
+        <input type="text" id="contact_number" name="contact_number" required>
+
+        <label for="amount_number">Amount (Number):</label>
+        <input type="number" id="amount_number" name="amount_number" required>
+
+        <button type="submit">Add Fund</button>
+    </form>
+
+    <a href="{{ url_for('display_donors') }}">Display Donors</a>
+</body>
+</html>
