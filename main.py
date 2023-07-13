@@ -1,13 +1,38 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 import json
 import os
 from num2words import num2words
 
 
 app = Flask(__name__)
+app.secret_key = "lkjghdfou;;'A'Fqpe7050&*%"  
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 
 DATA_FOLDER = os.getcwd()
 
+class User(UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
+
+@login_manager.user_loader
+def load_user(user_id):
+    # Load user from the database
+    return User(user_id)
+
+
+users = {
+    "JOSHUA":{'password': "password1"},
+    os.environ.get('USER2'): {
+        'password': os.environ.get('PASSWORD2')
+    },
+    "user3": {
+        'password': "password3"
+    }
+}
 
 # Load data from JSON file
 def load_data():
@@ -24,13 +49,37 @@ def save_data(data):
     with open(os.path.join(DATA_FOLDER, 'funds.json'), 'w') as file:
         json.dump(data, file, indent=4)
 
-
 @app.route('/')
 def home():
     return render_template('index.html')
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if username in users and password == users[username]['password']:
+            user = User(username)
+            login_user(user)
+            return redirect(url_for('home'))
+
+        return 'Invalid username or password'
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+
 @app.route('/add_fund', methods=['POST'])
+@login_required
 def add_fund():
     # Extract fund details from the request form
     name = request.form['name']
@@ -78,6 +127,7 @@ def add_fund():
 
 
 @app.route('/remove_donors', methods=['POST'])
+@login_required
 def remove_donors():
     # Extract donor name from the request form
     donor_name = request.form['donor_name']
@@ -96,6 +146,7 @@ def remove_donors():
 
 
 @app.route('/display_donors')
+@login_required
 def display_donors():
     # Load data
     data = load_data()
