@@ -23,7 +23,7 @@
             <button type="submit">Add Fund</button>
         </form>
 
-        <a href="{{ url_for('display_donors') }}">Display Donors</a>
+        <a href="{{ url_for('display_donors') }}">Display Donors</a>    
         <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
         <p>Please <a href="{{ url_for('login') }}">login</a> to access this page.</p>
