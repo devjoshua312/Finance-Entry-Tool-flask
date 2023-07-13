@@ -155,3 +155,5 @@ def display_donors():
     funds = data.get("Funds", [])
     return render_template('display_donors.html', funds=funds)
 
+if __name__ == '__main__':
+    app.run()
