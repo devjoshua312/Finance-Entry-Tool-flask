@@ -25,7 +25,9 @@ def load_user(user_id):
 
 
 users = {
-    "JOSHUA":{'password': "password1"},
+    os.environ.get('USER1'): {
+        'password': os.environ.get('PASSWORD1')
+        },
     os.environ.get('USER2'): {
         'password': os.environ.get('PASSWORD2')
     },
@@ -153,6 +155,3 @@ def display_donors():
     funds = data.get("Funds", [])
     return render_template('display_donors.html', funds=funds)
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
