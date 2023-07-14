@@ -7,7 +7,6 @@ app = Flask(__name__)
 DATA_FOLDER = os.getcwd()
 
 
-# Load data from JSON file
 def load_data():
     try:
         with open(os.path.join(DATA_FOLDER, 'funds.json'), 'r') as file:
@@ -24,7 +23,6 @@ def display_donors_by_name():
     if not name:
         return render_template('display_donors.html', funds=[])
 
-    # Load data
     data = load_data()
     funds = data.get("Funds", [])
 
@@ -35,7 +33,6 @@ def display_donors_by_name():
 
 @app.route('/display_all_donors')
 def display_all_donors():
-    # Load data
     data = load_data()
     funds = data.get("Funds", [])
 

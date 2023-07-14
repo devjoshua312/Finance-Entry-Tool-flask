@@ -20,7 +20,6 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Load user from the database
     return User(user_id)
 
 
@@ -36,7 +35,6 @@ users = {
     }
 }
 
-# Load data from JSON file
 def load_data():
     try:
         with open(os.path.join(DATA_FOLDER, 'funds.json'), 'r') as file:
@@ -46,7 +44,6 @@ def load_data():
         return {}
 
 
-# Save data to JSON file
 def save_data(data):
     with open(os.path.join(DATA_FOLDER, 'funds.json'), 'w') as file:
         json.dump(data, file, indent=4)
@@ -83,7 +80,6 @@ def logout():
 @app.route('/add_fund', methods=['POST'])
 @login_required
 def add_fund():
-    # Extract fund details from the request form
     name = request.form['name']
     date = request.form['date']
     contact_number = request.form['contact_number']
@@ -93,14 +89,11 @@ def add_fund():
     if not name or not date or not contact_number or not amount_words or not amount_number:
         return jsonify({'error': 'Please enter all fund details.'})
 
-    # Load existing data
     data = load_data()
 
-    # Check if the donor is already present
     duplicate_fund = next((fund for fund in data.get("Funds", []) if fund['Name'] == name), None)
 
     if duplicate_fund:
-        # Update the amount for duplicate donor
         existing_amount_number = float(duplicate_fund['AmountNumber'])
         new_amount_number = existing_amount_number + float(amount_number)
         duplicate_fund['AmountNumber'] = str(new_amount_number)
@@ -109,7 +102,6 @@ def add_fund():
         new_amount_words = num2words(new_amount_number)
         duplicate_fund['AmountWords'] = new_amount_words
     else:
-        # Create a new fund object
         new_fund = {
             "Name": name,
             "Date": date,
@@ -118,30 +110,23 @@ def add_fund():
             "AmountNumber": amount_number,
         }
 
-        # Add the new fund to the existing data
         data.setdefault("Funds", []).append(new_fund)
 
-    # Save the updated data
     save_data(data)
 
-    # return a html popup
     return(render_template('index.html'))
 
 
 @app.route('/remove_donors', methods=['POST'])
 @login_required
 def remove_donors():
-    # Extract donor name from the request form
     donor_name = request.form['donor_name']
 
-    # Load existing data
     data = load_data()
 
-    # Remove the donor from the existing data
     updated_funds = [fund for fund in data.get("Funds", []) if fund['Name'] != donor_name]
     data["Funds"] = updated_funds
 
-    # Save the updated data
     save_data(data)
 
     return(render_template('display_donors.html'))
@@ -150,7 +135,6 @@ def remove_donors():
 @app.route('/display_donors')
 @login_required
 def display_donors():
-    # Load data
     data = load_data()
     funds = data.get("Funds", [])
     return render_template('display_donors.html', funds=funds)
