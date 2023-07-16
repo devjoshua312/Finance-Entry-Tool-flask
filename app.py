@@ -83,7 +83,7 @@ def add_fund():
     name = request.form['name']
     date = request.form['date']
     contact_number = request.form['contact_number']
-    amount_words = num2words(float(request.form['amount_number']))
+    amount_words = num2words(float(request.form['amount_number']), lang='en_IN')
     amount_number = request.form['amount_number']
 
     if not name or not date or not contact_number or not amount_words or not amount_number:
@@ -97,9 +97,8 @@ def add_fund():
         existing_amount_number = float(duplicate_fund['AmountNumber'])
         new_amount_number = existing_amount_number + float(amount_number)
         duplicate_fund['AmountNumber'] = str(new_amount_number)
-
-        existing_amount_words = duplicate_fund['AmountWords']
-        new_amount_words = num2words(new_amount_number)
+        
+        new_amount_words = num2words(new_amount_number, lang='en_IN')
         duplicate_fund['AmountWords'] = new_amount_words
     else:
         new_fund = {

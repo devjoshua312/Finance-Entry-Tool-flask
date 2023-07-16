@@ -28,7 +28,7 @@
 
                 <div class="mb-3">
                     <label for="contact_number" class="form-label">Contact Number:</label>
-                    <input type="text" class="form-control" id="contact_number" name="contact_number" required>
+                    <input type="text" class="form-control" id="contact_number" name="contact_number" minlength="10" maxlength="10" required>
                 </div>
 
                 <div class="mb-3">
@@ -44,7 +44,10 @@
                 <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
             </div>
         {% else %}
-            <p class="mt-4">Please <a href="{{ url_for('login') }}">login</a> to access this page.</p>
+            <div class="container">
+                <h3 class="mb-4">You are not logged in!</h3>
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+            </div>
         {% endif %}
     </div>
 
