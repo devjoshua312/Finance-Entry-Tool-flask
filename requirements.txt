@@ -1,2 +1,6 @@
 Flask
 num2words
+Flask-Login
+os
+subprocess
+json
