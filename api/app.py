@@ -188,10 +188,13 @@ def display_donors():
         if float(fund['AmountNumber']) > highest_amount:
             highest_amount = float(fund['AmountNumber'])
             highest_donor = fund['Name']
+    try:    
+        with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
+            user_data = json.load(file)
+        users = user_data.get("users")
+    except Exception as e:
+        return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the file was: ", file, " and the exception was: ", e)
 
-    with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
-        user_data = json.load(file)
-    users = user_data.get("users")
 
     return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
 
