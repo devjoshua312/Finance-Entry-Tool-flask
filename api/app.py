@@ -16,7 +16,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-DATA_FOLDER = os.getcwd()
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -51,7 +50,7 @@ print(os.environ.get('PASSWORD1'))
 
 def load_data():
     try:
-        with open(os.path.join(DATA_FOLDER, 'funds.json'), 'r') as file:
+        with open(os.path.join('funds.json'), 'r') as file:
             data = json.load(file)
         return data
     except (FileNotFoundError, json.JSONDecodeError) as e:
@@ -59,7 +58,7 @@ def load_data():
 
 
 def save_data(data):
-    with open(os.path.join(DATA_FOLDER, 'funds.json'), 'w') as file:
+    with open(os.path.join('funds.json'), 'w') as file:
         json.dump(data, file, indent=4)
 
 @app.route('/')
@@ -184,7 +183,7 @@ def display_donors():
             highest_amount = float(fund['AmountNumber'])
             highest_donor = fund['Name']
 
-    with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
+    with open(os.path.join('users.json'), 'r') as file:
         user_data = json.load(file)
     users = user_data.get("users")
 
