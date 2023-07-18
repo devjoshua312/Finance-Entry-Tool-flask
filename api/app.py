@@ -9,6 +9,12 @@ load_dotenv()
 
 LoginManager.session_protection = "strong"
 
+
+# find out where users.json and funds.json files are located
+# and set the DATA_FOLDER variable to that location
+DATA_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
+
+
 app = Flask(__name__)
 app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 
@@ -84,7 +90,6 @@ def login():
         return 'Invalid username or password'
 
     return render_template('login.html')
-
 
 @app.route('/logout')
 @login_required
@@ -178,25 +183,22 @@ def remove_donors():
 @app.route('/display_donors')
 @login_required
 def display_donors():
-    try: 
-        data = load_data()
-        funds = data.get("Funds", [])
+    data = load_data()
+    funds = data.get("Funds", [])
 
-        # Find the highest donor
-        highest_donor = ""
-        highest_amount = 0
-        for fund in funds:
-            if float(fund['AmountNumber']) > highest_amount:
-                highest_amount = float(fund['AmountNumber'])
-                highest_donor = fund['Name']   
-            with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
-                user_data = json.load(file)
-            users = user_data.get("users")
+    # Find the highest donor
+    highest_donor = ""
+    highest_amount = 0
+    for fund in funds:
+        if float(fund['AmountNumber']) > highest_amount:
+            highest_amount = float(fund['AmountNumber'])
+            highest_donor = fund['Name']
+    
+    with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
+        user_data = json.load(file)
+    users = user_data.get("users")
 
-            return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
-    except Exception as e:
-        return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the exception was: ", e)
-    finally:
-        return(f"Error. I dont know WHAT the fuck im doing. The data_folder is: {DATA_FOLDER}, the files in {os.getcwd()} are: {os.listdir()}. But i do know that you tried to access funds.json, users.json and it errored out. maybe check the entire project dirs in vercel?")
+    return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
+
 if __name__ == '__main__':
     app.run(debug=True)
