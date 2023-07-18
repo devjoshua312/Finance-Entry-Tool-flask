@@ -110,8 +110,12 @@ def add_fund():
     amount_number = request.form['amount_number']
     address = request.form['address']
     if 'receipt' in request.files:
+        # if file with the name exists, replace it
+        if os.path.exists(f"receipts/{name}"):
+            os.remove(f"receipts/{name}.{receipt.filename.split('.')[-1]}")
         receipt = request.files['receipt']
         receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+
 
 
     if not name or not date or not contact_number or not amount_words or not amount_number:
