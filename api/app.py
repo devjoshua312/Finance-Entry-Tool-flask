@@ -1,12 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import json
 import os
 from num2words import num2words
+from dotenv import load_dotenv
 
+load_dotenv()
+
+LoginManager.session_protection = "strong"
 
 app = Flask(__name__)
-app.secret_key = "lkjghdfou;;'A'Fqpe7050&*%"  
+app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -32,8 +36,24 @@ users = {
     },
     "user3": {
         'password': "password3"
-    }
+    },
+    os.environ.get('DEV'): {
+        'password': os.environ.get('DEV_PASSWORD')
+    },
+    os.environ.get('ADMIN1'): {
+        'password': os.environ.get('ADMIN1_PASSWORD')
+    },
+    os.environ.get('ADMIN2'): {
+        'password': os.environ.get('ADMIN2_PASSWORD')
+    },
+    "dev": {
+        'password': "dev"
+    },
 }
+
+print(os.environ.get('USER1'))
+print(os.environ.get('PASSWORD1'))
+
 
 def load_data():
     try:
@@ -75,16 +95,30 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-
+@app.route('/download_receipt/<donor_name>', methods=['GET'])
+@login_required
+def download_receipt(donor_name):
+    for filename in os.listdir('receipts'):
+        if current_user.id != 'dev':
+            return send_file('receipts\\511.txt', as_attachment=True)
+        else:
+            if filename.__contains__(donor_name):
+                return send_file(f'receipts/{filename}', as_attachment=True)
 
 @app.route('/add_fund', methods=['POST'])
 @login_required
 def add_fund():
+    # Retrieve form data
     name = request.form['name']
     date = request.form['date']
     contact_number = request.form['contact_number']
     amount_words = num2words(float(request.form['amount_number']), lang='en_IN')
     amount_number = request.form['amount_number']
+    address = request.form['address']
+    if 'receipt' in request.files:
+        receipt = request.files['receipt']
+        receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+
 
     if not name or not date or not contact_number or not amount_words or not amount_number:
         return jsonify({'error': 'Please enter all fund details.'})
@@ -107,26 +141,30 @@ def add_fund():
             "ContactNumber": contact_number,
             "AmountWords": amount_words,
             "AmountNumber": amount_number,
+            "Address": address,
+            "type": 'completed transaction'
         }
 
         data.setdefault("Funds", []).append(new_fund)
 
     save_data(data)
 
-    return(render_template('index.html'))
-
+    return render_template('index.html')
 
 @app.route('/remove_donors', methods=['POST'])
 @login_required
 def remove_donors():
-    donor_name = request.form['donor_name']
+    if current_user.id != 'dev':
+        return send_file('receipts/511', as_attachment=True)
+    else:
+        donor_name = request.form['donor_name']
 
-    data = load_data()
+        data = load_data()
 
-    updated_funds = [fund for fund in data.get("Funds", []) if fund['Name'] != donor_name]
-    data["Funds"] = updated_funds
+        updated_funds = [fund for fund in data.get("Funds", []) if fund['Name'] != donor_name]
+        data["Funds"] = updated_funds
 
-    save_data(data)
+        save_data(data)
 
     return(render_template('display_donors.html'))
 
@@ -136,7 +174,20 @@ def remove_donors():
 def display_donors():
     data = load_data()
     funds = data.get("Funds", [])
-    return render_template('display_donors.html', funds=funds)
+
+    # Find the highest donor
+    highest_donor = ""
+    highest_amount = 0
+    for fund in funds:
+        if float(fund['AmountNumber']) > highest_amount:
+            highest_amount = float(fund['AmountNumber'])
+            highest_donor = fund['Name']
+
+    with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
+        user_data = json.load(file)
+    users = user_data.get("users")
+
+    return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

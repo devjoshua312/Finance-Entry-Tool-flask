@@ -21,13 +21,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
       .container {
-        max-width: 800px;
+        max-width: 1000px;
         margin-top: 50px;
       }
 
       table {
-        table-layout: fixed;
         width: 100%;
+      }
+
+      .date {
+        width: 100px;
+      }
+
+      h1 {
+        margin-top: 20px;
       }
     </style>
 
@@ -61,16 +68,26 @@
   </head>
   <body>
     <div class="container">
-      <h2>All Donors</h2>
+      <h1>
+        {% if highest_donor != "" %}
+        Highest Donor: {{ highest_donor }}
+        {% else %}
+        Highest Donor: N/A
+        {% endif %}
+      </h1>
+      <h2>All Donors. Current user: {{ username }}</h2>
       {% if funds %}
       <table class="table table-bordered">
         <thead>
           <tr>
             <th>Name</th>
-            <th>Date</th>
+            <th class="date">Date</th>
             <th>Contact Number</th>
             <th>Amount (Words)</th>
             <th>Amount (Number)</th>
+            <th>Address</th>
+            <th>Type</th>
+            <th>Receipt</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -78,11 +95,46 @@
           {% for fund in funds %}
           <tr>
             <td>{{ fund['Name'] }}</td>
-            <td>{{ fund['Date'] }}</td>
-            <td>{{ fund['ContactNumber'] }}</td>
-            <td>{{ fund['AmountWords'] }}</td>
-            <td>{{ fund['AmountNumber'] }}</td>
+            <td class="date">{{ fund['Date'] }}</td>
             <td>
+              {% if username in users['dev'] %}
+              {{ fund['ContactNumber'] }}
+              {% else %}
+              <p>N/A</p>
+              {% endif %}
+            </td>
+            <td>
+              {% if username in users['dev'] %}
+              {{ fund['AmountWords'] }}
+              {% else %}
+              <p>N/A</p>
+              {% endif %}
+            </td>
+            <td>
+              {% if username in users['dev'] %}
+              {{ fund['AmountNumber'] }}
+              {% else %}
+              <p>N/A</p>
+              {% endif %}
+            </td>
+            <!-- <td>{{ fund['AmountNumber'] }}</td> -->
+            <td>
+              {% if username in users['dev'] %}
+              {{ fund['Address'] }}
+              {% else %}
+              <p>N/A</p>
+              {% endif %}
+            </td>
+            <td>{{ fund['type'] }}</td>
+            <td>
+              {% if username in users['dev'] %}
+              <a href="{{ url_for('download_receipt', donor_name=fund['Name']) }}" class="btn btn-primary">Download Receipt</a>
+              {% else %}
+              <p>N/A</p>
+              {% endif %}
+            </td>
+            <td>
+              {% if username in users['dev'] %}
               <form
                 class="remove-donor-form"
                 action="/remove_donors"
@@ -98,6 +150,9 @@
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </form>
+              {% else %}
+              <p>N/A</p>
+              {% endif %}
             </td>
           </tr>
           {% endfor %}
@@ -108,4 +163,8 @@
       {% endif %}
     </div>
   </body>
+  <hr>
+  <p style="text-align: center; margin-top: 50px;">
+      Designed, Built by Esvin Joshua.
+    </p>
 </html>

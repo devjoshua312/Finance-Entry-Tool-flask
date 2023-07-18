@@ -1,43 +1,64 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+    />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     {% if current_user.is_authenticated %}
-        <div class="container">
-            <h1 class="mb-4">Login</h1>
-            <p>You are already logged in.</p>
-            <a href="/" class="btn btn-primary">Home</a>
-            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
-        </div>
+    <div class="container">
+      <h1 class="mb-4">Login</h1>
+      <p>You are already logged in.</p>
+      <a href="/" class="btn btn-primary">Home</a>
+      <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
 
     {% else %}
     <div class="container">
-        <h1 class="mb-4">Login</h1>
-        <form action="{{ url_for('login') }}" method="POST">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username:</label>
-                <input type="text" class="form-control" id="username" name="username" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
-        {% endif %}
-
+      <h1 class="mb-4">Login</h1>
+      <form action="{{ url_for('login') }}" method="POST">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <div
+          class="g-recaptcha"
+          data-sitekey="6LeSnS4nAAAAAJK1L7rsN9L0k98-GymUjVfigTeA"
+        ></div>
+        <br />
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      {% endif %}
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 </html>
