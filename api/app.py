@@ -178,20 +178,20 @@ def remove_donors():
 @app.route('/display_donors')
 @login_required
 def display_donors():
-    data = load_data()
-    funds = data.get("Funds", [])
+    try: 
+        data = load_data()
+        funds = data.get("Funds", [])
 
-    # Find the highest donor
-    highest_donor = ""
-    highest_amount = 0
-    for fund in funds:
-        if float(fund['AmountNumber']) > highest_amount:
-            highest_amount = float(fund['AmountNumber'])
-            highest_donor = fund['Name']
-    try:    
-        with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
-            user_data = json.load(file)
-        users = user_data.get("users")
+        # Find the highest donor
+        highest_donor = ""
+        highest_amount = 0
+        for fund in funds:
+            if float(fund['AmountNumber']) > highest_amount:
+                highest_amount = float(fund['AmountNumber'])
+                highest_donor = fund['Name']   
+            with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
+                user_data = json.load(file)
+            users = user_data.get("users")
     except Exception as e:
         return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the exception was: ", e)
 
