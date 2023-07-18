@@ -202,8 +202,8 @@ def display_donors():
         return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
     except Exception as e:
         return render_template('display_donors.html', funds=[], users=[], username=current_user.id, highest_donor="")
-    finally:
-        return(f"Aight. looks like you got an error. heres what i know: the data folder is {DATA_FOLDER}. your current dir is {os.getcwd()}. the current user is {current_user.id}. The program couldnt find the json files specified.")
+    # finally:
+    #     return(f"Aight. looks like you got an error. heres what i know: the data folder is {DATA_FOLDER}. your current dir is {os.getcwd()}. the current user is {current_user.id}. The program couldnt find the json files specified. The files in this directory are: {os.listdir()}")
 
 if __name__ == '__main__':
     app.run(debug=True)
