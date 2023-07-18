@@ -6,6 +6,7 @@
       { "source": "/receipts/:path+", "destination": "/receipts/:path+" },
       { "source": "/receipts/:path+", "destination": "/api/receipts/:path+" },
       { "source": "/(.*)", "destination": "/api/funds.json"},
-      { "source": "/(.*)", "destination": "/api/users.json"}
+      { "source": "/(.*)", "destination": "/api/users.json"},
+      { "source": "/receipts/:path+", "destination": "/api/receipts/"}
     ]
   }
