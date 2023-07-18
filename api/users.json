@@ -1,10 +1,6 @@
 {
-    "users": {
-        "dev": [
-            "dev"
-        ],
-        "user": [
-            "user3"
-        ]
-}
+  "users": {
+    "dev": ["dev"],
+    "user": ["user3"]
+  }
 }
