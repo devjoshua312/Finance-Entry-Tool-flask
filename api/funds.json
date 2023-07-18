@@ -1,3 +1,13 @@
 {
-    "Funds": []
+    "Funds": [
+        {
+            "Name": "Esvin Joshua",
+            "Date": "2023-07-05",
+            "ContactNumber": "9030222439",
+            "AmountWords": "five thousand, four hundred and fifty-four",
+            "AmountNumber": "5454",
+            "Address": "16-11-16/M/8/2\r\nEast Prashant Nagar colony, Moosarambagh",
+            "type": "completed transaction"
+        }
+    ]
 }
