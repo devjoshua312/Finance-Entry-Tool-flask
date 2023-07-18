@@ -4,6 +4,7 @@ import json
 import os
 from num2words import num2words
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
@@ -15,7 +16,9 @@ app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
+logging.info(f"current files in directory: {os.getcwd()}; {os.listdir()}")
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -44,39 +47,46 @@ users = {
     },
 }
 
-print(os.environ.get('USER1'))
-print(os.environ.get('PASSWORD1'))
+
 
 
 def load_data():
     try:
         with open(('funds.json'), 'r') as file:
+            logging.info('Loading data from funds.json')
             data = json.load(file)
+            logging.info('Data loaded successfully')
         return data
     except (FileNotFoundError, json.JSONDecodeError) as e:
+        logging.error(f'Error loading data from funds.json: {e}')
         return {}
 
 
 def save_data(data):
     with open(('funds.json'), 'w') as file:
+        logging.info('Saving data to funds.json')
         json.dump(data, file, indent=4)
 
 @app.route('/')
 def home():
+    logging.info('Rendering home page')
     return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    logging.info('Rendering login page')
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
+        logging.info(f'User {username} is trying to login')
         if username in users and password == users[username]['password']:
+            logging.info(f'User {username} logged in successfully')
+            logging.info(f'current user: {current_user.id}')
             user = User(username)
             login_user(user)
             return redirect(url_for('home'))
-
+        logging.info(f'User {username} failed to login. incorrect password')
         return 'Invalid username or password'
 
     return render_template('login.html')
@@ -85,22 +95,28 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    logging.info(f'User {current_user.id} logged out')
     logout_user()
     return redirect(url_for('home'))
 
 @app.route('/download_receipt/<donor_name>', methods=['GET'])
 @login_required
 def download_receipt(donor_name):
+    logging.info(f'User {current_user.id} is downloading receipt for {donor_name}')
     for filename in os.listdir('receipts'):
         if current_user.id != 'dev':
+            logging.info(f'User {current_user.id} is not authorized to download receipts')
             return send_file('receipts\\511.txt', as_attachment=True)
         else:
+            logging.info(f'User {current_user.id} is authorized to download receipts')
             if filename.__contains__(donor_name):
+                logging.info(f'User {current_user.id} downloaded receipt for {donor_name}')
                 return send_file(f'receipts/{filename}', as_attachment=True)
 
 @app.route('/add_fund', methods=['POST'])
 @login_required
 def add_fund():
+    logging.info(f'User {current_user.id} is adding a fund')
     # Retrieve form data
     name = request.form['name']
     date = request.form['date']
@@ -108,16 +124,22 @@ def add_fund():
     amount_words = num2words(float(request.form['amount_number']), lang='en_IN')
     amount_number = request.form['amount_number']
     address = request.form['address']
+    logging.info(f'User {current_user.id} added a fund for {name}')
     if 'receipt' in request.files:
+        logging.info(f'User {current_user.id} uploaded a receipt for {name}')
         # if file with the name exists, replace it
         if os.path.exists(f"receipts/{name}"):
+            logging.info(f'Receipt for {name} already exists. Replacing it.')
             os.remove(f"receipts/{name}.{receipt.filename.split('.')[-1]}")
             receipt = request.files['receipt']
             receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+            logging.info(f'Receipt for {name} replaced successfully')
         else:
+            logging.info(f'Receipt for {name} does not exist. Creating it.')
             receipt = request.files['receipt']
             receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
     else:
+        logging.info(f'User {current_user.id} did not upload a receipt for {name}')
         pass
 
 
@@ -130,8 +152,10 @@ def add_fund():
     duplicate_fund = next((fund for fund in data.get("Funds", []) if fund['Name'] == name), None)
 
     if duplicate_fund:
+        logging.info(f'A fund for {name} already exists. Updating it.')
         existing_amount_number = float(duplicate_fund['AmountNumber'])
         new_amount_number = existing_amount_number + float(amount_number)
+        logging.info(f'New amount for {name}: {new_amount_number}')
         duplicate_fund['AmountNumber'] = str(new_amount_number)
         
         new_amount_words = num2words(new_amount_number, lang='en_IN')
@@ -156,14 +180,15 @@ def add_fund():
 @app.route('/remove_donors', methods=['POST'])
 @login_required
 def remove_donors():
+    logging.info(f'User {current_user.id} is removing a donor')
     if current_user.id != 'dev':
+        logging.info(f'User {current_user.id} is not authorized to remove donors. Attempted to remove {request.form["donor_name"]}')
         return send_file('receipts/511', as_attachment=True)
     else:
         donor_name = request.form['donor_name']
-
         data = load_data()
-
         updated_funds = [fund for fund in data.get("Funds", []) if fund['Name'] != donor_name]
+        logging.info(f'User {current_user.id} removed {donor_name}')
         data["Funds"] = updated_funds
 
         save_data(data)
@@ -184,8 +209,8 @@ def display_donors():
         if float(fund['AmountNumber']) > highest_amount:
             highest_amount = float(fund['AmountNumber'])
             highest_donor = fund['Name']
-
     with open(('users.json'), 'r') as file:
+        logging.info('Loading data from users.json')
         user_data = json.load(file)
     users = user_data.get("users")
 
