@@ -183,22 +183,27 @@ def remove_donors():
 @app.route('/display_donors')
 @login_required
 def display_donors():
-    data = load_data()
-    funds = data.get("Funds", [])
+    try:
+        data = load_data()
+        funds = data.get("Funds", [])
 
-    # Find the highest donor
-    highest_donor = ""
-    highest_amount = 0
-    for fund in funds:
-        if float(fund['AmountNumber']) > highest_amount:
-            highest_amount = float(fund['AmountNumber'])
-            highest_donor = fund['Name']
-    
-    with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
-        user_data = json.load(file)
-    users = user_data.get("users")
+        # Find the highest donor
+        highest_donor = ""
+        highest_amount = 0
+        for fund in funds:
+            if float(fund['AmountNumber']) > highest_amount:
+                highest_amount = float(fund['AmountNumber'])
+                highest_donor = fund['Name']
+        
+        with open(os.path.join(DATA_FOLDER, 'users.json'), 'r') as file:
+            user_data = json.load(file)
+        users = user_data.get("users")
 
-    return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
+        return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
+    except Exception as e:
+        return render_template('display_donors.html', funds=[], users=[], username=current_user.id, highest_donor="")
+    finally:
+        return(f"Aight. looks like you got an error. heres what i know: the error is {e}. the data folder is {DATA_FOLDER}. your current dir is {os.getcwd()}. the current user is {current_user.id}. The program couldnt find the json files specified.")
 
 if __name__ == '__main__':
     app.run(debug=True)
