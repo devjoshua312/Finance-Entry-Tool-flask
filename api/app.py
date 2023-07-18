@@ -197,6 +197,6 @@ def display_donors():
     except Exception as e:
         return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the exception was: ", e)
     finally:
-        return(f"Error. I dont know WHAT the fuck im doing. The data_folder is: {DATA_FOLDER}, the files in {os.getcwd()} are: {os.listdir()}")
+        return(f"Error. I dont know WHAT the fuck im doing. The data_folder is: {DATA_FOLDER}, the files in {os.getcwd()} are: {os.listdir()}. But i do know that you tried to access funds.json, users.json and it errored out. maybe check the entire project dirs in vercel?")
 if __name__ == '__main__':
     app.run(debug=True)
