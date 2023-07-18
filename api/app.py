@@ -193,7 +193,7 @@ def display_donors():
             user_data = json.load(file)
         users = user_data.get("users")
     except Exception as e:
-        return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the file was: ", file, " and the exception was: ", e)
+        return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the exception was: ", e)
 
 
     return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
