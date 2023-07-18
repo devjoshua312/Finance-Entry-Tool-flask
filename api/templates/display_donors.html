@@ -69,11 +69,8 @@
   <body>
     <div class="container">
       <h1>
-        {% if highest_donor != "" %}
-        Highest Donor: {{ highest_donor }}
-        {% else %}
-        Highest Donor: N/A
-        {% endif %}
+        {% if highest_donor != "" %} Highest Donor: {{ highest_donor }} {% else
+        %} Highest Donor: N/A {% endif %}
       </h1>
       <h2>All Donors. Current user: {{ username }}</h2>
       {% if funds %}
@@ -97,37 +94,36 @@
             <td>{{ fund['Name'] }}</td>
             <td class="date">{{ fund['Date'] }}</td>
             <td>
-              {% if username in users['dev'] %}
-              {{ fund['ContactNumber'] }}
-              {% else %}
+              {% if username in users['dev'] %} {{ fund['ContactNumber'] }} {%
+              else %}
               <p>N/A</p>
               {% endif %}
             </td>
             <td>
-              {% if username in users['dev'] %}
-              {{ fund['AmountWords'] }}
-              {% else %}
+              {% if username in users['dev'] %} {{ fund['AmountWords'] }} {%
+              else %}
               <p>N/A</p>
               {% endif %}
             </td>
             <td>
-              {% if username in users['dev'] %}
-              {{ fund['AmountNumber'] }}
-              {% else %}
+              {% if username in users['dev'] %} {{ fund['AmountNumber'] }} {%
+              else %}
               <p>N/A</p>
               {% endif %}
             </td>
             <td>
-              {% if username in users['dev'] %}
-              {{ fund['Address'] }}
-              {% else %}
+              {% if username in users['dev'] %} {{ fund['Address'] }} {% else %}
               <p>N/A</p>
               {% endif %}
             </td>
             <td>{{ fund['type'] }}</td>
             <td>
               {% if username in users['dev'] %}
-              <a href="{{ url_for('download_receipt', donor_name=fund['Name']) }}" class="btn btn-primary">Download Receipt</a>
+              <a
+                href="{{ url_for('download_receipt', donor_name=fund['Name']) }}"
+                class="btn btn-primary"
+                >Download Receipt</a
+              >
               {% else %}
               <p>N/A</p>
               {% endif %}
@@ -162,8 +158,8 @@
       {% endif %}
     </div>
   </body>
-  <hr>
-  <p style="text-align: center; margin-top: 50px;">
-      Designed, Built by Esvin Joshua.
-    </p>
+  <hr />
+  <p style="text-align: center; margin-top: 50px">
+    Designed, Built by Esvin Joshua.
+  </p>
 </html>
