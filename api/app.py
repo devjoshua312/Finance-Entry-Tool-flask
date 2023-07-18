@@ -34,9 +34,6 @@ users = {
     os.environ.get('USER2'): {
         'password': os.environ.get('PASSWORD2')
     },
-    "user3": {
-        'password': "password3"
-    },
     os.environ.get('DEV'): {
         'password': os.environ.get('DEV_PASSWORD')
     },
@@ -45,9 +42,6 @@ users = {
     },
     os.environ.get('ADMIN2'): {
         'password': os.environ.get('ADMIN2_PASSWORD')
-    },
-    "dev": {
-        'password': "dev"
     },
 }
 

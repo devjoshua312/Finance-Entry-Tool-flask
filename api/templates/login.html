@@ -15,6 +15,11 @@
         height: 100vh;
       }
     </style>
+    <script>
+      function enableSubmitButton() {
+        document.getElementById("submit-button").disabled = false;
+      }
+    </script>
   </head>
   <body>
     {% if current_user.is_authenticated %}
@@ -52,9 +57,10 @@
         <div
           class="g-recaptcha"
           data-sitekey="6LeSnS4nAAAAAJK1L7rsN9L0k98-GymUjVfigTeA"
+          data-callback="enableSubmitButton"
         ></div>
         <br />
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" id="submit-button" class="btn btn-primary" disabled>Login</button>
       </form>
       {% endif %}
     </div>
