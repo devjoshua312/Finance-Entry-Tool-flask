@@ -117,6 +117,8 @@ def add_fund():
         else:
             receipt = request.files['receipt']
             receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+    else:
+        pass
 
 
 
