@@ -109,18 +109,15 @@ def add_fund():
     amount_words = num2words(float(request.form['amount_number']), lang='en_IN')
     amount_number = request.form['amount_number']
     address = request.form['address']
-    for receipt in request.files.getlist('receipt'):
-        if 'receipt' in request.files:
-            # if file with the name exists, replace it
-            if os.path.exists(f"receipts/{name}"):
-                os.remove(f"receipts/{name}.{receipt.filename.split('.')[-1]}")
-                receipt = request.files['receipt']
-                receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
-            else:
-                receipt = request.files['receipt']
-                receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+    if 'receipt' in request.files:
+        # if file with the name exists, replace it
+        if os.path.exists(f"receipts/{name}"):
+            os.remove(f"receipts/{name}.{receipt.filename.split('.')[-1]}")
+            receipt = request.files['receipt']
+            receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
         else:
-            continue
+            receipt = request.files['receipt']
+            receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
 
 
 
