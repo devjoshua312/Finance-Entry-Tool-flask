@@ -1,6 +1,7 @@
 {
     "rewrites": [
       { "source": "/(.*)", "destination": "/api/app.py" },
-      { "source": "/:path+", "destination": "/:path+" }
+      { "source": "/:path+", "destination": "/:path+" },
+      { "source": "/:path+", "destination": "/api/:path+" }
     ]
   }
