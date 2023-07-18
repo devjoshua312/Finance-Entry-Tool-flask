@@ -196,6 +196,7 @@ def display_donors():
             return render_template('display_donors.html', funds=funds, users=users, username=current_user.id, highest_donor=highest_donor)
     except Exception as e:
         return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the exception was: ", e)
-
+    finally:
+        return("Error. I dont know WHAT the fuck im doing.")
 if __name__ == '__main__':
     app.run(debug=True)
