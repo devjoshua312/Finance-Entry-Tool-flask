@@ -197,6 +197,6 @@ def display_donors():
     except Exception as e:
         return("Couldnt find the files you wanted. The directory accessed was: ", DATA_FOLDER, " and the exception was: ", e)
     finally:
-        return("Error. I dont know WHAT the fuck im doing.")
+        return(f"Error. I dont know WHAT the fuck im doing. The data_folder is: {DATA_FOLDER}")
 if __name__ == '__main__':
     app.run(debug=True)
