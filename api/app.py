@@ -63,7 +63,7 @@ print(os.environ.get('PASSWORD1'))
 
 def load_data():
     try:
-        with open(os.path.join(DATA_FOLDER, 'funds.json')) as file:
+        with open(os.path.join(DATA_FOLDER, 'funds.json'), 'r') as file:
             data = json.load(file)
         return data
     except (FileNotFoundError, json.JSONDecodeError) as e:
@@ -71,7 +71,7 @@ def load_data():
 
 
 def save_data(data):
-    with open(os.path.join(DATA_FOLDER, 'funds.json')) as file:
+    with open(os.path.join(DATA_FOLDER, 'funds.json'), 'w') as file:
         json.dump(data, file, indent=4)
 
 
@@ -109,9 +109,10 @@ def download_receipt(donor_name):
     for filename in os.listdir('receipts'):
         if current_user.id != 'dev':
             return send_file('receipts\\511.txt', as_attachment=True)
-        else:
-            if filename.__contains__(donor_name):
+        elif current_user.id == 'dev' and filename.__contains__(donor_name):
                 return send_file(f'receipts/{filename}', as_attachment=True)
+        else:
+            return "No receipt found"
 
 
 @app.route('/add_fund', methods=['POST'])
@@ -125,7 +126,7 @@ def add_fund():
         float(request.form['amount_number']), lang='en_IN')
     amount_number = request.form['amount_number']
     address = request.form['address']
-    if request.files != None:
+    if request.files:
         receipt = request.files['receipt']
         receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
     else:
