@@ -57,17 +57,6 @@ users = {
 }
 
 
-if open(os.path.join(DATA_FOLDER, 'funds.json')):
-    pass
-else: 
-    open('funds.json', 'x')
-if open(os.path.join(DATA_FOLDER, 'users.json')):
-    pass
-else:
-    open('users.json', 'x')
-
-
-
 print(os.environ.get('USER1'))
 print(os.environ.get('PASSWORD1'))
 
