@@ -149,7 +149,7 @@ def add_fund():
 
              new_amount_words = num2words(new_amount_number, lang='en_IN')
              duplicate_fund['AmountWords'] = new_amount_words
-         else:
+        else:
              new_fund = {
                    "Name": name,
                    "Date": date,
