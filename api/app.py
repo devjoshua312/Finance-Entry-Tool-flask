@@ -162,7 +162,7 @@ def add_fund():
 
              data.setdefault("Funds", []).append(new_fund)
 
-            save_data(data)
+             save_data(data)
 
           return render_template('index.html')
     except Exception as e:
