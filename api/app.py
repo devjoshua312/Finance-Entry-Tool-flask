@@ -164,7 +164,7 @@ def add_fund():
 
              save_data(data)
 
-          return render_template('index.html')
+             return render_template('index.html')
     except Exception as e:
         return(e)
     finally:
