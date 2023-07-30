@@ -58,11 +58,11 @@ users = {
 
 
 if open(os.path.join(DATA_FOLDER, 'funds.json')):
-    continue 
+    pass
 else: 
     open('funds.json', 'x')
 if open(os.path.join(DAT_FOLDER, 'users.json')):
-    continue
+    pass
 else:
     open('users.json', 'x')
 
