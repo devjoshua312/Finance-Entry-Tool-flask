@@ -160,7 +160,7 @@ def add_fund():
                    "type": 'completed transaction'
                  }
 
-            data.setdefault("Funds", []).append(new_fund)
+             data.setdefault("Funds", []).append(new_fund)
 
             save_data(data)
 
