@@ -166,7 +166,7 @@ def add_fund():
 
              return render_template('index.html')
     except Exception as e:
-        return(e)
+        return(f"The system encountered an error. Either the files were not created or they could not be accessed.Here's the info {e}")
     finally:
         return(f"Aight. looks like you got an error. heres what i know: the data folder is {DATA_FOLDER}. your current dir is {os.getcwd()}. the current user is {current_user.id}. The program couldnt find the json files specified. The files in this directory are: {os.listdir()}")
 
