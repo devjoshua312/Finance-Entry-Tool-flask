@@ -135,7 +135,7 @@ def add_fund():
         address = request.form['address']
         if request.files != None:
             receipt = request.files['receipt']
-            receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+            receipt.save(f'receipts/{name.strip()}.{receipt.filename.split(".")[-1]}')
         else:
             pass
 
