@@ -109,14 +109,16 @@ def logout():
 @app.route('/download_receipt/<donor_name>', methods=['GET'])
 @login_required
 def download_receipt(donor_name):
-    for filename in os.listdir('receipts'):
-        if current_user.id != 'dev':
-            return send_file('receipts\\511.txt', as_attachment=True)
-        elif current_user.id == 'dev' and filename.__contains__(donor_name):
-                return send_file(f'receipts/{filename}', as_attachment=True)
-        else:
-            return "No receipt found"
-
+    try:
+        for filename in os.listdir('receipts'):
+            if current_user.id != 'dev':
+                return send_file('receipts\\511.txt', as_attachment=True)
+            elif current_user.id == 'dev' and filename.__contains__(donor_name):
+                    return send_file(f'receipts/{filename}', as_attachment=True)
+            else:
+                return "No receipt found"
+    except Exception as e:
+        return(f"Error. Either the reciepts cannot be found or the folder could not be accessed. {e}")
 
 @app.route('/add_fund', methods=['POST'])
 @login_required
@@ -131,11 +133,11 @@ def add_fund():
               float(request.form['amount_number']), lang='en_IN')
         amount_number = request.form['amount_number']
         address = request.form['address']
-        # if request.files:
-        #     receipt = request.files['receipt']
-        #     receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
-        # else:
-        #     pass
+        if request.files != None:
+            receipt = request.files['receipt']
+            receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
+        else:
+            pass
 
         if not name or not date or not contact_number or not amount_words or not amount_number:
              return jsonify({'error': 'Please enter all fund details.'})
