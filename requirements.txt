@@ -2,3 +2,4 @@ Flask
 num2words
 Flask-Login
 python-dotenv
+Gunicorn
