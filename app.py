@@ -158,21 +158,6 @@ def add_fund():
              new_amount_words = num2words(new_amount_number, lang='en_IN')
              duplicate_fund['AmountWords'] = new_amount_words
 
-             updated_fund = {
-                   "Name": name,
-                   "Date": date,
-                   "ContactNumber": contact_number,
-                   "AmountWords": new_amount_words,
-                   "AmountNumber": new_amount_number,
-                   "Address": address,
-                   "type": 'completed transaction'
-                 }
-             
-             data.setdefault("Funds", []).append(updated_fund)
-
-             save_data(data)
-             
-             return render_template('index.html')
         else:
              new_fund = {
                    "Name": name,

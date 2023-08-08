@@ -2,12 +2,12 @@
     "Funds": [
         {
             "Name": "John Doe",
-                   "Date": "09/09/9898",
-                   "ContactNumber": "5454545454",
-                   "AmountWords": "ss",
-                   "AmountNumber": "090909",
-                   "Address": "ss",
-                   "type": "sss"
+            "Date": "09/09/9898",
+            "ContactNumber": "5454545454",
+            "AmountWords": "ss",
+            "AmountNumber": "090909",
+            "Address": "ss",
+            "type": "sss"
         }
     ]
 }
