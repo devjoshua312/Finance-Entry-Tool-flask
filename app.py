@@ -4,6 +4,8 @@ import json
 import os
 from num2words import num2words
 from dotenv import load_dotenv
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
 load_dotenv()
 
@@ -24,6 +26,7 @@ login_manager.init_app(app)
 
 DATA_FOLDER = os.getcwd()
 
+mongo_uri = os.environ.get("mongo_uri")
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -77,11 +80,19 @@ def save_data(data):
     except Exception as e:
             return({})
 
-
 @app.route('/')
 def home():
     return render_template('index.html')
 
+@login_required
+@app.route('/debug')
+def debug():
+    client = MongoClient(mongo_uri, server_api=ServerApi('1'))
+    try:
+        client.admin.command('ping')
+        print("Pinged your deployment. You successfully connected to MongoDB!")
+    except Exception as e:
+        print(e)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
