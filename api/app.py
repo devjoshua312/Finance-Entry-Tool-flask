@@ -93,6 +93,8 @@ def debug():
         return render_template("debug.html", message="Pinged your deployment. You successfully connected to MongoDB!")
     except Exception as e:
         return render_template('debug.html', message=e)
+    finally:
+        return render_template('debug.html', message=f"Travelled far and wide, but i could not achieve this task. Your mongo uri is {uri}")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
