@@ -87,8 +87,8 @@ def home():
 @login_required
 @app.route('/debug')
 def debug():
-    client = MongoClient(mongo_uri, server_api=ServerApi('1'))
     try:
+        client = MongoClient(mongo_uri, server_api=ServerApi('1'))
         client.admin.command('ping')
         return("Pinged your deployment. You successfully connected to MongoDB!")
     except Exception as e:
