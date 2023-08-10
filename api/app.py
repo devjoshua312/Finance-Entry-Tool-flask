@@ -96,6 +96,7 @@ def debug():
     finally:
         return render_template('debug.html', message=f"Travelled far and wide, but i could not achieve this task. Your mongo uri is {uri}")
 
+##
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
