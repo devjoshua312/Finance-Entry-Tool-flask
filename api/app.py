@@ -85,7 +85,7 @@ def home():
     return render_template('index.html')
 
 @login_required
-@app.route('/debug')
+@app.route('/debug-custom')
 def debug():
     try:
         client = MongoClient(uri, server_api=ServerApi('1'))
