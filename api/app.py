@@ -26,7 +26,7 @@ login_manager.init_app(app)
 
 DATA_FOLDER = os.getcwd()
 
-mongo_uri = os.environ.get("mongo_uri")
+uri = os.environ.get("mongo_uri")
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -88,7 +88,7 @@ def home():
 @app.route('/debug')
 def debug():
     try:
-        client = MongoClient(mongo_uri, server_api=ServerApi('1'))
+        client = MongoClient(uri, server_api=ServerApi('1'))
         client.admin.command('ping')
         return render_template("debug.html", message="Pinged your deployment. You successfully connected to MongoDB!")
     except Exception as e:
