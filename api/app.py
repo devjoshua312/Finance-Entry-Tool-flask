@@ -31,7 +31,7 @@ uri = os.environ.get("mongo_uri")
 class User(UserMixin):
     def __init__(self, user_id):
         self.id = user_id
-
+# 
 
 @login_manager.user_loader
 def load_user(user_id):
