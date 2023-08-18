@@ -4,7 +4,8 @@ import json
 import os
 from num2words import num2words
 from dotenv import load_dotenv
-from pymongo.mongo_client import MongoClient
+import asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.server_api import ServerApi
 
 load_dotenv()
@@ -26,7 +27,7 @@ login_manager.init_app(app)
 
 DATA_FOLDER = os.getcwd()
 
-uri = "mongodb+srv://esvinjoshua:esvinJOSHUA12@esvinjbcd.z4v7zcr.mongodb.net/?retryWrites=true&w=majority"
+uri = f"{os.environ.get('mongo_uri')}"
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -86,17 +87,16 @@ def home():
 
 @login_required
 @app.route('/debug-custom')
-def debug():
-    try:
-        client = MongoClient(uri, server_api=ServerApi('1'))
-        client.admin.command('ping')
-        return render_template("debug.html", message="Pinged your deployment. You successfully connected to MongoDB!")
-    except Exception as e:
-        return render_template('debug.html', message=e)
-    finally:
-        return render_template('debug.html', message=f"Travelled far and wide, but i could not achieve this task. Your mongo uri is {uri}")
+async def debug():
+        client = AsyncIOMotorClient(uri, server_api=ServerApi('1'))
+        try:
+            client.admin.command('ping')
+            return render_template("debug.html", message="Pinged your deployment. You successfully connected to MongoDB!")
+        except Exception as e:
+            return render_template('debug.html', message=e)
+        finally:
+            return render_template('debug.html', message=f"Travelled far and wide, but i could not achieve this task. Your mongo uri is {uri}")
 
-##
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
