@@ -3,5 +3,3 @@ num2words
 Flask-Login
 python-dotenv
 pymongo
-asyncio
-motor
