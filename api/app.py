@@ -26,7 +26,7 @@ login_manager.init_app(app)
 
 DATA_FOLDER = os.getcwd()
 
-uri = os.environ.get("mongo_uri")
+uri = "mongodb+srv://esvinjoshua:esvinJOSHUA12@esvinjbcd.z4v7zcr.mongodb.net/?retryWrites=true&w=majority"
 
 class User(UserMixin):
     def __init__(self, user_id):
