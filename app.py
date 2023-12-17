@@ -18,6 +18,7 @@ DATA_FOLDER = os.path.join(os.path.dirname(
 
 app = Flask(__name__)
 app.secret_key = 'EsvinJoshua123#'
+grec_sitekey = os.environ.get('GREC_SITEKEY')
 # app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 
 login_manager = LoginManager()
@@ -80,7 +81,7 @@ def login():
 
         return 'Invalid username or password'
 
-    return render_template('login.html')
+    return render_template('login.html', grec_sitekey=grec_sitekey)
 
 
 @app.route('/logout')
