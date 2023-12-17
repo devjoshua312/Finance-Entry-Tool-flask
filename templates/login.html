@@ -17,7 +17,9 @@
     </style>
     <script>
       function enableSubmitButton() {
+        // This function will be called when the captcha is successful
         document.getElementById("submit-button").disabled = false;
+        document.getElementById("submit-button").style.display = "inline-block";
       }
     </script>
   </head>
@@ -60,10 +62,10 @@
           data-callback="enableSubmitButton"
         ></div>
         <br />
-        <button type="submit" id="submit-button" class="btn btn-primary" >Login</button>
+        <button type="submit" id="submit-button" class="btn btn-primary" style="display: none;">Login</button>
       </form>
-      {% endif %}
     </div>
+    {% endif %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
   </body>
