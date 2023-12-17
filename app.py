@@ -19,7 +19,6 @@ DATA_FOLDER = os.path.join(os.path.dirname(
 app = Flask(__name__)
 app.secret_key = 'EsvinJoshua123#'
 grec_sitekey = os.environ.get('grec_sitekey')
-print("key :", grec_sitekey)
 # app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 
 login_manager = LoginManager()
