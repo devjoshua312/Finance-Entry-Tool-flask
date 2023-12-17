@@ -8,6 +8,33 @@
             "AmountNumber": "090909",
             "Address": "ss",
             "type": "sss"
+        },
+        {
+            "Name": "Esvin Joshua",
+            "Date": "2023-12-22",
+            "ContactNumber": "8888888888",
+            "AmountWords": "four",
+            "AmountNumber": "4",
+            "Address": "jhjhjhjh",
+            "type": "completed transaction"
+        },
+        {
+            "Name": "Jane Doe",
+            "Date": "2222-02-12",
+            "ContactNumber": "9898989898",
+            "AmountWords": "ninety thousand",
+            "AmountNumber": "90000",
+            "Address": "000000",
+            "type": "completed transaction"
+        },
+        {
+            "Name": "Niel Doe",
+            "Date": "2000-03-12",
+            "ContactNumber": "0000000000",
+            "AmountWords": "nine thousand",
+            "AmountNumber": "9000",
+            "Address": "0000",
+            "type": "completed transaction"
         }
     ]
 }

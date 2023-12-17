@@ -4,8 +4,6 @@ import json
 import os
 from num2words import num2words
 from dotenv import load_dotenv
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
 
 load_dotenv()
 
@@ -19,14 +17,14 @@ DATA_FOLDER = os.path.join(os.path.dirname(
 
 
 app = Flask(__name__)
-app.secret_key = f"{os.environ.get('SECRET_KEY')}"
+app.secret_key = 'EsvinJoshua123#'
+# app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 DATA_FOLDER = os.getcwd()
 
-uri = f"{os.environ.get('mongo_uri')}"
 
 class User(UserMixin):
     def __init__(self, user_id):
@@ -39,21 +37,6 @@ def load_user(user_id):
 
 
 users = {
-    os.environ.get('USER1'): {
-        'password': os.environ.get('PASSWORD1')
-    },
-    os.environ.get('USER2'): {
-        'password': os.environ.get('PASSWORD2')
-    },
-    os.environ.get('DEV'): {
-        'password': os.environ.get('DEV_PASSWORD')
-    },
-    os.environ.get('ADMIN1'): {
-        'password': os.environ.get('ADMIN1_PASSWORD')
-    },
-    os.environ.get('ADMIN2'): {
-        'password': os.environ.get('ADMIN2_PASSWORD')
-    },
     "dev": {
         'password':  "dev"
     }
@@ -83,18 +66,6 @@ def save_data(data):
 @app.route('/')
 def home():
     return render_template('index.html')
-
-@login_required
-@app.route('/debug-custom')
-def debug():
-    client = MongoClient(uri, server_api=ServerApi('1'))
-    try:
-        client.admin.command('ping')
-        return render_template("debug.html", message="Pinged your deployment. You successfully connected to MongoDB!")
-    except Exception as e:
-        return render_template('debug.html', message=e)
-    finally:
-        return render_template('debug.html', message=f"Travelled far and wide, but i could not achieve this task. Your mongo uri is {uri}")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -170,6 +141,8 @@ def add_fund():
 
              new_amount_words = num2words(new_amount_number, lang='en_IN')
              duplicate_fund['AmountWords'] = new_amount_words
+
+             return render_template('index.html')
 
         else:
              new_fund = {
