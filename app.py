@@ -18,7 +18,8 @@ DATA_FOLDER = os.path.join(os.path.dirname(
 
 app = Flask(__name__)
 app.secret_key = 'EsvinJoshua123#'
-grec_sitekey = os.environ.get('GREC_SITEKEY')
+grec_sitekey = os.environ.get('grec_sitekey')
+print("key :", grec_sitekey)
 # app.secret_key = f"{os.environ.get('SECRET_KEY')}"
 
 login_manager = LoginManager()
@@ -30,7 +31,6 @@ DATA_FOLDER = os.getcwd()
 class User(UserMixin):
     def __init__(self, user_id):
         self.id = user_id
-# 
 
 @login_manager.user_loader
 def load_user(user_id):
