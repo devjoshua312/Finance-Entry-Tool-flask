@@ -67,6 +67,7 @@
     </script>
   </head>
   <body>
+    {% if current_user.is_authenticated %}
     <div class="container">
       <h1>
         {% if highest_donor != "" %} Highest Donor: {{ highest_donor }} {% else
@@ -157,6 +158,12 @@
       <p>No donors found.</p>
       {% endif %}
     </div>
+    {% else %}
+    <div class="container">
+      <h3 class="mb-4">You are not logged in!</h3>
+      <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+    </div>
+    {% endif %}
   </body>
   <hr />
   <p style="text-align: center; margin-top: 50px">
