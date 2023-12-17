@@ -36,15 +36,15 @@ def load_user(user_id):
     return User(user_id)
 
 
-users = {
-    "dev": {
-        'password':  "dev"
-    }
-}
+# users = {
+#     "dev": {
+#         'password':  "dev"
+#     }
+# }
 
 
-print(os.environ.get('USER1'))
-print(os.environ.get('PASSWORD1'))
+# print(os.environ.get('USER1'))
+# print(os.environ.get('PASSWORD1'))
 
 
 def load_data():
