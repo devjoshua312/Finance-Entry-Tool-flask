@@ -2,3 +2,7 @@
 .vscode/settings.json
 __pycache__/update.cpython-311.pyc
 .vscode/settings.json
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/modules.xml
+.idea/flask_FET.iml
