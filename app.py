@@ -36,11 +36,11 @@ def load_user(user_id):
     return User(user_id)
 
 
-# users = {
-#     "dev": {
-#         'password':  "dev"
-#     }
-# }
+users = {
+    "dev": {
+        'password':  "dev"
+    }
+}
 
 
 # print(os.environ.get('USER1'))
