@@ -23,38 +23,37 @@ Before running the application, ensure you have the following installed:
 - Flask-Login
 - python-dotenv
 - pymongo
-- gunicorn (optional)
   
 ## Installation
 
 1. Clone the repository:
 
-   ```bash
+   ```
    git clone https://github.com/devjoshua312/Finance-Entry-Tool-flask.git
    ```
 
 2. Change into the project directory:
 
-   ```bash
+   ```
    cd project-folder
    ```
 
 3. Install dependencies:
 
-   ```bash
+   ```
    pip install -r requirements.txt
    ```
 
    
 ### Environment Variables
 
-The wwebsite uses a reCaptcha test at login for some security. 
+The website uses a reCaptcha test at login for some security. 
 
 - `grec_sitekey`: Your reCAPTCHA site key
 
 Create a `.env` file in the project root and set the environment variables:
 
-```env
+```
 grec_sitekey=your_recaptcha_key
 ```
 
@@ -63,9 +62,14 @@ For information on creating a reCaptcha key, check out [Google reCaptcha](https:
 ## Usage
 
 Run the Flask application:
-
-```bash
+-Windows:
+```
 python app.py
+```
+
+-Mac/Linux:
+```
+python3 app.py
 ```
 
 ## Endpoints
