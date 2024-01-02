@@ -12,17 +12,19 @@ A basic Flask app to simulate functionality for managing funds, generating recei
 - Add funds with details like name, date, contact number, and receipt
 - Generate receipts for donors
 - Display a list of donors with contribution details
+- Scan the reciept given by donor to see if the names match
+
 
 ## Prerequisites
 
-Before running the application, ensure you have the following installed:
+Before running the application, ensure you have all the required packages by running;
 
-- Python 3.x
-- Flask
-- num2words
-- Flask-Login
-- python-dotenv
-- pymongo
+```
+pip install -r requirements.txt
+```
+
+To use the reciept scanning feature, you need the Tesseract engine. Check out [how to install](https://tesseract-oc.r.github.io/tessdoc/Installation.html).
+
   
 ## Installation
 
@@ -38,13 +40,6 @@ Before running the application, ensure you have the following installed:
    cd project-folder
    ```
 
-3. Install dependencies:
-
-   ```
-   pip install -r requirements.txt
-   ```
-
-   
 ### Environment Variables
 
 The website uses a reCaptcha test at login for some security. 
@@ -62,14 +57,16 @@ For information on creating a reCaptcha key, check out [Google reCaptcha](https:
 ## Usage
 
 Run the Flask application:
--Windows:
+
+There are two ways to do this. One is with the Python Flask service:
 ```
 python app.py
 ```
 
--Mac/Linux:
+And the other is by using Gunicorn
+
 ```
-python3 app.py
+gunicorn app:app.py
 ```
 
 ## Endpoints

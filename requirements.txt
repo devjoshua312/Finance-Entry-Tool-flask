@@ -4,3 +4,6 @@ Flask-Login
 python-dotenv
 pymongo
 gunicorn
+pillow
+re
+pytesseract
