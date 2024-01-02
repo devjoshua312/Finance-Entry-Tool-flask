@@ -1,1 +1,44 @@
-{}
+{
+    "Funds": [
+        {
+            "Name": "Esvin Joshua",
+            "Date": "2024-01-17",
+            "ContactNumber": "9030222439",
+            "AmountWords": "nine lakh",
+            "AmountNumber": "900000",
+            "Address": "home",
+            "type": "completed transaction",
+            "recStatus": "Verified"
+        },
+        {
+            "Name": "Jane Doe",
+            "Date": "8888-08-08",
+            "ContactNumber": "9898989898",
+            "AmountWords": "eighty-nine thousand, eight hundred and ninety-eight",
+            "AmountNumber": "89898",
+            "Address": "98989",
+            "type": "completed transaction",
+            "recStatus": "pending"
+        },
+        {
+            "Name": "John Doe",
+            "Date": "8888-12-08",
+            "ContactNumber": "9898989898",
+            "AmountWords": "nine crore, eighty-nine lakh, eighty-nine thousand, eight hundred and ninety-eight",
+            "AmountNumber": "98989898",
+            "Address": "9898",
+            "type": "completed transaction",
+            "recStatus": "pending"
+        },
+        {
+            "Name": "Jana Doe",
+            "Date": "20202-08-08",
+            "ContactNumber": "0909090909",
+            "AmountWords": "nine crore, nine lakh, nine thousand and ninety-nine",
+            "AmountNumber": "090909099",
+            "Address": "09090909",
+            "type": "completed transaction",
+            "recStatus": "pending"
+        }
+    ]
+}

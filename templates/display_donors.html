@@ -1,172 +1,194 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Display Donors</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-      .container {
-        max-width: 1000px;
-        margin-top: 50px;
+<html lang="en">
+<head>
+  <title>Display Donors</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      animation: gradient 15s infinite alternate;
+    }
+
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
       }
-
-      table {
-        width: 100%;
+      100% {
+        background-position: 100% 50%;
       }
+    }
 
-      .date {
-        width: 100px;
-      }
+    .container {
+      max-width: 1000px;
+      margin-top: 50px;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
 
-      h1 {
-        margin-top: 20px;
-      }
-    </style>
+    .container:hover {
+      transform: scale(1.02);
+    }
 
-    <script>
-      $(document).ready(function () {
-        $(".remove-donor-form").on("submit", function (e) {
-          e.preventDefault();
-          var form = $(this);
-          var donorName = form.find(".donor-name").val();
+    h1, h4 {
+      color: #17a2b8;
+    }
 
-          $.ajax({
-            url: "/remove_donors",
-            type: "POST",
-            data: { donor_name: donorName },
-            success: function (response) {
-              if (response.success) {
-                form.closest("tr").remove();
-                location.href = "/display_donors";
-              } else {
-                location.href = "/display_donors";
-                console.log(response.error);
-              }
-            },
-            error: function (xhr) {
-              console.log(xhr.statusText);
-            },
-          });
+    .table th,
+    .table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .remove-donor-form {
+      display: inline-block;
+    }
+
+    .remove-donor-form button {
+      background-color: #dc3545;
+      color: #fff;
+    }
+
+    .remove-donor-form button:hover {
+      background-color: #c82333;
+    }
+
+    .not-authorized {
+      color: #dc3545;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+    }
+  </style>
+
+  <script>
+    $(document).ready(function () {
+      $(".remove-donor-form").on("submit", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var donorName = form.find(".donor-name").val();
+
+        $.ajax({
+          url: "/remove_donors",
+          type: "POST",
+          data: { donor_name: donorName },
+          success: function (response) {
+            if (response.success) {
+              form.closest("tr").remove();
+              location.href = "/display_donors";
+            } else {
+              location.href = "/display_donors";
+              console.log(response.error);
+            }
+          },
+          error: function (xhr) {
+            console.log(xhr.statusText);
+          },
         });
       });
-    </script>
-  </head>
-  <body>
-    {% if current_user.is_authenticated %}
-    <div class="container">
-      <h1>
-        {% if highest_donor != "" %} Highest Donor: {{ highest_donor }} {% else
-        %} Highest Donor: N/A {% endif %}
-      </h1>
-      <h2>All Donors. Current user: {{ username }}</h2>
-      {% if funds %}
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th class="date">Date</th>
-            <th>Contact Number</th>
-            <th>Amount (Words)</th>
-            <th>Amount (Number)</th>
-            <th>Address</th>
-            <th>Type</th>
-            <th>Receipt</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for fund in funds %}
-          <tr>
-            <td>{{ fund['Name'] }}</td>
-            <td class="date">{{ fund['Date'] }}</td>
-            <td>
-              {% if username in users['dev'] %} {{ fund['ContactNumber'] }} {%
-              else %}
-              <p>N/A</p>
-              {% endif %}
-            </td>
-            <td>
-              {% if username in users['dev'] %} {{ fund['AmountWords'] }} {%
-              else %}
-              <p>N/A</p>
-              {% endif %}
-            </td>
-            <td>
-              {% if username in users['dev'] %} {{ fund['AmountNumber'] }} {%
-              else %}
-              <p>N/A</p>
-              {% endif %}
-            </td>
-            <td>
-              {% if username in users['dev'] %} {{ fund['Address'] }} {% else %}
-              <p>N/A</p>
-              {% endif %}
-            </td>
-            <td>{{ fund['type'] }}</td>
-            <td>
-              {% if username in users['dev'] %}
-              <a
-                href="{{ url_for('download_receipt', donor_name=fund['Name']) }}"
-                class="btn btn-primary"
-                >Download Receipt</a
-              >
-              {% else %}
-              <p>N/A</p>
-              {% endif %}
-            </td>
-            <td>
-              {% if username in users['dev'] %}
-              <form
-                class="remove-donor-form"
-                action="/remove_donors"
-                method="POST"
-              >
-                <input
-                  type="hidden"
-                  class="donor-name"
-                  name="donor_name"
-                  value="{{ fund['Name'] }}"
-                />
-                <button type="submit" class="btn btn-danger">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-              </form>
-              {% else %}
-              <p>N/A</p>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <p>No donors found.</p>
-      {% endif %}
-    </div>
+    });
+  </script>
+</head>
+
+<body>
+  {% if current_user.is_authenticated %}
+  <div class="container">
+    <h1>
+      {% if highest_donor != "" %} Highest Donor: {{ highest_donor }} {% else %} Highest Donor: N/A {% endif %}
+    </h1>
+    <h4>Current user: {{ username }}</h4>
+    {% if funds %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th class="date">Date</th>
+          <th>Contact Number</th>
+          <th>Amount (Words)</th>
+          <th>Amount (Number)</th>
+          <th>Address</th>
+          <th>Type</th>
+          <th>Receipt Status</th>
+          <th>Receipt</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fund in funds %}
+        <tr>
+          <td>{{ fund['Name'] }}</td>
+          <td class="date">{{ fund['Date'] }}</td>
+          <td>{% if username in users['dev'] %} {{ fund['ContactNumber'] }} {% else %}<span class="not-authorized">Not Authorized</span>{% endif %}</td>
+          <td>{% if username in users['dev'] %} {{ fund['AmountWords'] }} {% else %}<span class="not-authorized">Not Authorized</span>{% endif %}</td>
+          <td>{% if username in users['dev'] %} {{ fund['AmountNumber'] }} {% else %}<span class="not-authorized">Not Authorized</span>{% endif %}</td>
+          <td>{% if username in users['dev'] %} {{ fund['Address'] }} {% else %}<span class="not-authorized">Not Authorized</span>{% endif %}</td>
+          <td>{{ fund['type'] }}</td>
+          {% if fund['recStatus'] == '' %} 
+          <td>No Reciept</td>
+          {% else %}
+          <td>{{ fund['recStatus'] }}</td>
+          {% endif %}
+          <td>{% if username in users['dev'] %}<a href="{{ url_for('download_receipt', donor_name=fund['Name']) }}" class="btn btn-primary">Download Receipt</a>{% else %}<span class="not-authorized">Not Authorized</span>{% endif %}</td>
+          <td>
+            {% if username in users['dev'] %}
+            <form class="remove-donor-form" action="/remove_donors" method="POST">
+              <input type="hidden" class="donor-name" name="donor_name" value="{{ fund['Name'] }}" />
+              <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+            </form>
+            {% else %}<span class="not-authorized">Not Authorized</span>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
     {% else %}
-    <div class="container">
-      <h3 class="mb-4">You are not logged in!</h3>
-      <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
-    </div>
+    <p>No donors found.</p>
     {% endif %}
-  </body>
+  </div>
+  {% else %}
+  <div class="container">
+    <h3 class="mb-4">You are not logged in!</h3>
+    <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+  </div>
+  {% endif %}
   <hr />
-  <p style="text-align: center; margin-top: 50px">
-    Designed, Built by Esvin Joshua.
-  </p>
+  <p class="footer">Designed, Built by Esvin Joshua.</p>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

@@ -1,78 +1,82 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Login</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
-    />
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <style>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+<html lang="en">
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css" />
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f8f9fa;
+    }
+
+    .login-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .login-container:hover {
+      transform: scale(1.02);
+    }
+
+    .footer-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+  <script>
+    function enableSubmitButton() {
+      var submitButton = document.getElementById("submit-button");
+      submitButton.disabled = false;
+      submitButton.style.display = "inline-block";
+    }
+
+    function preventEnterSubmit(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        alert("Click the 'Login' button!");
       }
-    </style>
-    <script>
-      function enableSubmitButton() {
-        // This function will be called when the captcha is successful
-        document.getElementById("submit-button").disabled = false;
-        document.getElementById("submit-button").style.display = "inline-block";
-      }
-    </script>
-  </head>
-  <body>
-    {% if current_user.is_authenticated %}
-    <div class="container">
-      <h1 class="mb-4">Login</h1>
-      <p>You are already logged in.</p>
-      <a href="/" class="btn btn-primary">Home</a>
-      <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    }
+  </script>
+</head>
+<body>
+  {% if current_user.is_authenticated %}
+  <div class="container">
+    <h1 class="mb-4">Login</h1>
+    <p>You are already logged in.</p>
+    <a href="/" class="btn btn-primary">Home</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+  </div>
+  {% else %}
+  <div class="container login-container">
+    <h1 class="mb-4">Login</h1>
+    <form action="{{ url_for('login') }}" method="POST"> <!--  onkeydown="preventEnterSubmit(event)" -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" class="form-control" id="username" name="username" required />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" class="form-control" id="password" name="password" required />
+      </div>
+      <div class="g-recaptcha" data-sitekey="{{ grec_sitekey }}" data-callback="enableSubmitButton"></div>
+      <br />
+      <button type="submit" id="submit-button" class="btn btn-primary" style="display: none;">Login</button>
+    </form>
+    <div class="container footer-container">
+      <hr />
+      <p>Designed, Built by Esvin Joshua.</p>
+      <p>Also check out: <a href="https://github.com/devjoshua312">GitHub</a></p>
     </div>
-
-    {% else %}
-    <div class="container">
-      <h1 class="mb-4">Login</h1>
-      <form action="{{ url_for('login') }}" method="POST">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="username"
-            name="username"
-            required
-          />
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password:</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            required
-          />
-        </div>
-        <div
-          class="g-recaptcha"
-          data-sitekey= "{{ grec_sitekey }}"
-          data-callback="enableSubmitButton"
-        ></div>
-        <br />
-        <button type="submit" id="submit-button" class="btn btn-primary" style="display: none;">Login</button>
-      </form>
-      <div class="container">
-        <hr />
-        <p>Designed, Built by Esvin Joshua.</p>
-        <p>Also check out: <a href="https://github.com/devjoshua312">GitHub</a></p>
-          </div>
-    </div>
-    {% endif %}
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-
-  </body>
+  </div>
+  {% endif %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

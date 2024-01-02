@@ -8,3 +8,4 @@ __pycache__/update.cpython-311.pyc
 .idea/flask_FET.iml
 __pycache__/app.cpython-312.pyc
 .idea/misc.xml
+*.pyc

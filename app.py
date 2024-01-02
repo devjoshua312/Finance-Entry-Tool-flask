@@ -3,9 +3,11 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 import json
 import os
 from num2words import num2words
-from dotenv import load_dotenv
+from scan import *
 
-load_dotenv()
+# from dotenv import load_dotenv
+
+# load_dotenv()
 
 LoginManager.session_protection = "strong"
 
@@ -44,6 +46,12 @@ users = {
     },
     os.environ.get('dev_user_name'): {
         'password': os.environ.get('dev_user_pass')
+    }, 
+    "dev": {
+        'password': 'dev'
+    }, 
+    "user": {
+        'password': 'user'
     }
 }
 
@@ -97,34 +105,35 @@ def logout():
 @login_required
 def download_receipt(donor_name):
     try:
-        for filename in os.listdir('receipts'):
-            if current_user.id != 'dev':
-                return send_file('receipts\\511.txt', as_attachment=True)
-            elif current_user.id == 'dev' and filename.__contains__(donor_name):
-                return send_file(f'receipts/{filename}', as_attachment=True)
+        if current_user.id != 'dev':
+            return send_file('receipts/511.txt', as_attachment=True, attachment_filename='info.txt')
+        else:
+            receipts = os.listdir('receipts/')
+            print(receipts)
+            print(donor_name)
+            if donor_name in receipts:
+                extension = donor_name.split(".")[-1]
+                return send_file(f'receipts/{donor_name}.{extension}', download_name=f'{donor_name}.{extension}', as_attachment=True)
             else:
-                return "No receipt found"
+                return send_file(f'receipts/{donor_name}.jpeg', download_name=f'{donor_name}.{extension}', as_attachment=True)
     except Exception as e:
-        return f"Error. Either the reciepts cannot be found or the folder could not be accessed. {e}"
-
+        return "Reciept not found."
 
 @app.route('/add_fund', methods=['POST'])
 @login_required
 def add_fund():
     try:
-
-        # Retrieve form data
         name = request.form['name']
         date = request.form['date']
         contact_number = request.form['contact_number']
-        amount_words = num2words(
-            float(request.form['amount_number']), lang='en_IN')
+        amount_words = num2words(float(request.form['amount_number']), lang='en_IN')
         amount_number = request.form['amount_number']
         address = request.form['address']
+
         try:
-            if request.files is not None:
+            if request.files['receipt']:
                 receipt = request.files['receipt']
-                receipt.save(f'receipts/{name.strip()}')
+                receipt.save(f'receipts/{name}.{receipt.filename.split(".")[-1]}')
             else:
                 pass
         except:
@@ -135,8 +144,7 @@ def add_fund():
 
         data = load_data()
 
-        duplicate_fund = next((fund for fund in data.get(
-            "Funds", []) if fund['Name'] == name), None)
+        duplicate_fund = next((fund for fund in data.get("Funds", []) if fund['Name'] == name), None)
 
         if duplicate_fund:
             existing_amount_number = float(duplicate_fund['AmountNumber'])
@@ -156,18 +164,19 @@ def add_fund():
                 "AmountWords": amount_words,
                 "AmountNumber": amount_number,
                 "Address": address,
-                "type": 'completed transaction'
+                "type": 'completed transaction',
+                "recStatus": 'pending'
             }
 
             data.setdefault("Funds", []).append(new_fund)
 
             save_data(data)
 
+            scan(name, None)
+
             return render_template('index.html')
     except Exception as e:
-        return (
-            f"The system encountered an error. Either the files were not created or they could not be accessed.Here's "
-            f"the info {e}")
+        return f"The system encountered an error. Either the files were not created or they could not be accessed. Here's the info {e}"
     # finally:
     #     return(f"Aight. looks like you got an error. heres what i know: the data folder is {DATA_FOLDER}. your current dir is {os.getcwd()}. the current user is {current_user.id}. The program couldnt find the json files specified. The files in this directory are: {os.listdir()}")
 
@@ -198,7 +207,6 @@ def display_donors():
         data = load_data()
         funds = data.get("Funds", [])
 
-        # Find the highest donor
         highest_donor = ""
         highest_amount = 0
         for fund in funds:
